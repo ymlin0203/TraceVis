@@ -24,8 +24,25 @@ if uploaded_file is None:
 
 # 讀取資料
 df = pd.read_csv(uploaded_file, sep="\t", encoding="ISO-8859-1")
-df['Visit'] = df['SampleID'].str.extract(r'^(V\d+)')
-df['SubjectID'] = df['SampleID'].str.extract(r'-(\d{4})_')
+
+# 讓使用者指定欄位
+columns = df.columns.tolist()
+visit_col = st.selectbox("請選擇 Visit 欄位", columns)
+subject_col = st.selectbox("請選擇 SubjectID 欄位", columns)
+pc1_col = st.selectbox("請選擇 PC1 欄位", columns)
+pc2_col = st.selectbox("請選擇 PC2 欄位", columns)
+
+# 標準化欄位命名
+try:
+    df['Visit'] = df[visit_col].astype(str)
+    df['SubjectID'] = df[subject_col].astype(str)
+    df['PC1'] = df[pc1_col]
+    df['PC2'] = df[pc2_col]
+except Exception as e:
+    st.error(f"❌ 資料欄位錯誤：{e}")
+    st.stop()
+
+# 移除缺漏值
 df = df.dropna(subset=['Visit', 'SubjectID', 'PC1', 'PC2'])
 
 # 動畫參數
@@ -33,7 +50,7 @@ n_frames = st.slider("每段動畫的幀數（越高越平滑）", min_value=5, 
 interval = st.slider("動畫速度（毫秒間隔）", min_value=50, max_value=1000, value=200, step=50)
 
 # 使用者勾選要跑哪些 Visit 組別
-all_visits = sorted(df['Visit'].dropna().unique(), key=lambda v: int(v[1:]))
+all_visits = sorted(df['Visit'].dropna().unique())
 selected_visits = st.multiselect("選擇要呈現的 Visit 時點（至少 2 個）", all_visits, default=all_visits)
 
 if len(selected_visits) < 2:
