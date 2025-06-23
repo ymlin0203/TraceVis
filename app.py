@@ -16,7 +16,7 @@ st.title("🧬 TraceVis: 多時點樣本遷移可視化系統")
 st.markdown("上傳你的 PCoA .tsv 檔案，支援任意 Visit 組合之間的遷移動畫")
 
 # 檔案上傳
-uploaded_file = st.file_uploader("請上傳 pcoa_transition_ready.tsv 檔案", type=["tsv"])
+uploaded_file = st.file_uploader("請上傳 PCoA 檔案（支援 .tsv, .csv, .xlsx）", type=["tsv", "csv", "xlsx"])
 
 if uploaded_file is None:
     st.warning("請先上傳檔案。")
