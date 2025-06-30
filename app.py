@@ -22,8 +22,17 @@ if uploaded_file is None:
     st.warning("請先上傳檔案。")
     st.stop()
 
-# 讀取資料
-df = pd.read_csv(uploaded_file, sep="\t", encoding="utf-8-sig")
+# 自動判斷檔案格式
+if uploaded_file.name.endswith(".tsv"):
+    df = pd.read_csv(uploaded_file, sep="\t", encoding="utf-8-sig")
+elif uploaded_file.name.endswith(".csv"):
+    df = pd.read_csv(uploaded_file, encoding="utf-8-sig")
+elif uploaded_file.name.endswith(".xlsx"):
+    df = pd.read_excel(uploaded_file)
+else:
+    st.error("❌ 不支援的檔案格式")
+    st.stop()
+
 
 # 讓使用者指定欄位
 columns = df.columns.tolist()
