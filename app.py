@@ -23,7 +23,7 @@ if uploaded_file is None:
     st.stop()
 
 # 讀取資料
-df = pd.read_csv(uploaded_file, sep="\t", encoding="ISO-8859-1")
+df = pd.read_csv(uploaded_file, sep="\t", encoding="utf-8-sig")
 
 # 讓使用者指定欄位
 columns = df.columns.tolist()
